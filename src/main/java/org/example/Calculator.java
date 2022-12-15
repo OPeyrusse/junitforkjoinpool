@@ -27,14 +27,13 @@ public class Calculator {
         System.out.println(Thread.currentThread().getName() + " starting a new test. Running: " + count);
         if (count > 10) {
             System.out.println("Too many tests running in parallel: " + count);
+            // In case of failure, cancel the whole project here
+            // Chosen mode as it is less tedious than cancelling each of the future test to run in case of an error
             System.exit(1);
         }
 
         try {
             POOL.submit(task);
-            if (Thread.currentThread().getStackTrace().length >= 200) {
-                throw new RuntimeException("More than one test running on same thread");
-            }
             return task.get();
         } finally {
             COUNTER.decrementAndGet();
@@ -50,7 +49,7 @@ public class Calculator {
 
         protected Integer compute() {
             try {
-                Thread.sleep(10000);
+                TimeUnit.SECONDS.sleep(10);
                 return 2 * this.a;
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();

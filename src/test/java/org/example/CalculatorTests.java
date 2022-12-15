@@ -9,15 +9,21 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 class CalculatorTests {
+    // Test launcher
+    // The more test methods, the faster the error arises
+    // We have noticed that the less number of tests methods, the slower it is to trigger the error
+    // After a quick glance at JUnit code, in the case of parameterized tests, not all tests are scheduled at once
+    // Instead, the more tests are running, the more duplicates we see in the execution.
+    // When limiting this class to doubleIntWithTask{1,2} and doubleIntWithCompleter{1,2}, it took ~45s to trigger the
+    // error.
 
     private static Stream<Arguments> intStream() {
         return IntStream.rangeClosed(0, 100).mapToObj(Arguments::of);
-//        return Stream.of(Arguments.of(1));
     }
 
     @ParameterizedTest(name = "Double {0}")
     @MethodSource("intStream")
-    void doubleIntWithTask(int first) throws Exception {
+    void doubleIntWithTask1(int first) throws Exception {
         Calculator calculator = new Calculator();
         assertEquals(2 * first, calculator.doubleIntWithTask(first));
     }
@@ -52,7 +58,7 @@ class CalculatorTests {
 
     @ParameterizedTest(name = "Double {0}")
     @MethodSource("intStream")
-    void doubleIntWithCompleter(int first) throws Exception {
+    void doubleIntWithCompleter1(int first) throws Exception {
         Calculator calculator = new Calculator();
         assertEquals(2 * first, calculator.doubleIntWithCompleter(first));
     }
