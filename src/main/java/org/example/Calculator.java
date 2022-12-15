@@ -25,7 +25,7 @@ public class Calculator {
     private int doubler(final ForkJoinTask<Integer> task) throws ExecutionException, InterruptedException {
         final var count = COUNTER.incrementAndGet();
         System.out.println(Thread.currentThread().getName() + " starting a new test. Running: " + count);
-        if (count > 10) {
+        if (count > 20) {
             System.out.println("Too many tests running in parallel: " + count);
             // In case of failure, cancel the whole project here
             // Chosen mode as it is less tedious than cancelling each of the future test to run in case of an error
